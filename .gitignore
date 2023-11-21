@@ -1,0 +1,12 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+frontend/.next/trace
+frontend/pages/index_bk.js
+
+#Hardhat files
+cache
+artifacts
+
