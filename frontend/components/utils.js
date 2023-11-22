@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { NFTTicketAddress } from '../contracts';
+import { NFTTicketAddressArray } from '../contracts';
 
 export const TX_STATUS = {
   NOT_START: 'not-start',
@@ -14,11 +14,11 @@ export const ETHERS_SIGNTYPE_EIP712_SIGN_v4 = 'eth_signTypedData_v4';
 
 export const ETHEREUM_MAIN_ID = 1;
 export const TICKET_NFT_CHAIN_ID =
-  process.env.ENVIRONMENT === 'development'
+  process.env.IS_ZKEVM === true
     ? process.env.TESTNET_CHAIN_ID
     : process.env.MAINNET_CHAIN_ID;
 export const TICKET_NFT_CHAIN_ID_HEX =
-  process.env.ENVIRONMENT === 'development'
+  process.env.IS_ZKEVM === true
     ? process.env.TESTNET_CHAIN_ID_HEX
     : process.env.MAINNET_CHAIN_ID_HEX;
 
@@ -50,10 +50,10 @@ export const ONCHAIN_EVENT = {
     '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
 };
 
-export const TOTAL_CONTRACT_COUNT = NFTTicketAddress.length;
+export const TOTAL_CONTRACT_COUNT = NFTTicketAddressArray.length;
 
 export const FIXED_RPC_PROVIDER =
-  process.env.ENVIRONMENT === 'development'
+  process.env.IS_ZKEVM === true
     ? new ethers.providers.StaticJsonRpcProvider(
         process.env.TESTNET_RPC_PROVIDER,
       )

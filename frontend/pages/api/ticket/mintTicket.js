@@ -4,7 +4,7 @@ import {
   BICONOMY_API_CONTENT_TYPE,
   SIGNTYPE_EIP712_SIGN,
 } from 'components/utils';
-import { ERC2771NFTAddress } from 'contracts';
+import { NFTTicketAddress } from 'contracts';
 import ParticipationTicket from 'contracts/ParticipationTicket.json';
 import { Wallet, providers, ethers } from 'ethers';
 import { HttpsProxyAgent } from 'https-proxy-agent';

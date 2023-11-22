@@ -78,9 +78,9 @@ export function ClientContextProvider({ children }) {
             chainNamespace: 'eip155',
             chainId: TICKET_NFT_CHAIN_ID_HEX,
             rpcTarget:
-              process.env.ENVIRONMENT === 'development'
-                ? process.env.MUMBAI_RPC_PROVIDER
-                : process.env.POLYGON_MAINNET_RPC_PROVIDER,
+              process.env.IS_ZKEVM === true
+                ? process.env.TESTNET_RPC_PROVIDER
+                : process.env.MAINNET_RPC_PROVIDER,
           };
           const web3auth = new Web3AuthNoModal({
             clientId: process.env.WEB3AUTH_CLIENT_ID,
@@ -159,7 +159,7 @@ export function ClientContextProvider({ children }) {
         chainNamespace: 'eip155',
         chainId: TICKET_NFT_CHAIN_ID_HEX,
         rpcTarget:
-          process.env.ENVIRONMENT === 'development'
+          process.env.IS_ZKEVM === true
             ? process.env.TESTNET_RPC_PROVIDER
             : process.env.MAINNET_RPC_PROVIDER,
       };

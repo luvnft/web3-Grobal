@@ -14,7 +14,7 @@ import { API_RESPONSE } from 'pages/api/api-constants';
 import { useState, useEffect } from 'react';
 import { TailSpin, Rings } from 'react-loader-spinner';
 import { useWalletConnectClient } from '../components/contexts/ClientContext';
-import { ERC2771NFTAddress } from '../contracts';
+import { NFTTicketAddress } from '../contracts';
 
 export function MintModal({
   open,
@@ -802,7 +802,7 @@ export function ParticipationModal({
       },
       nftTicket: {
         name: 'コミュニティ参加券',
-        contractAddress: ERC2771NFTAddress.toLowerCase(),
+        contractAddress: NFTTicketAddress.toLowerCase(),
         tokenId: ticketInfo[0].tokenId,
         operation: 'consume',
         date: Date.now(),

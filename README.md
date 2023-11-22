@@ -1,8 +1,34 @@
-## 動作環境
+## Environment
 - OS windows10
 - node.js v18.16.0
 - npm v8.19.2
 - Next.js v13.3.2
 
-※hardhatなど、その他ライブラリのバージョンについては、package.jsonを参照
+※ Versions of other libraries such as hardhat, see package.json
 
+
+## Setting environment variables
+Please set the environment variables in /frontend/next.config.js.
+
+- IS_ZKEVM: If True, zKatana will be selected; if False, ASTAR mainnet will be selected.
+- WEB3AUTH_CLIENT_ID: web3auth client ID. You can get it from your web3auth dashboard.
+- BUNDLER_URL: Biconomy SDK bundler URL.
+- PAYMASTER_URL: Biconomy SDK paymaster URL.
+- OPERATION_PRIVATE_KEY: This is the private key used when airdropping NFTs.
+
+## Installing the library
+```
+cd frontend
+npm install
+```
+
+## Starting
+```
+cd frontend
+npm run dev
+```
+
+## Other
+The app uses DynamoDB as the database.<br>
+If you want to check the operation on your local PC, you can use DynamoDB Local.<br>
+https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBLocal.html

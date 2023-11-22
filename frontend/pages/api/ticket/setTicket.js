@@ -9,7 +9,7 @@ import {
   LOCAL_CONFIG,
   PROD_CONFIG,
 } from 'pages/api/api-constants';
-import { ERC2771NFTAddress } from '../../../contracts';
+import { NFTTicketAddress } from '../../../contracts';
 
 let dynamoDBClient;
 if (process.env.IS_LOCALHOST === true) {
@@ -29,25 +29,6 @@ if (process.env.IS_LOCALHOST === true) {
 
 export default async function handler(req, res) {
   try {
-    // localhostで実行されているかのチェック
-    if (process.env.IS_LOCALHOST === false) {
-      // エラー原因解明のためのログ
-      console.error('setCoupon NOT LOCALHOST ERROR');
-      console.log(
-        util.inspect(req.body, {
-          depth: Infinity,
-          breakLength: Infinity,
-          compact: true,
-        }),
-      );
-
-      res.status(API_RESPONSE.BAD_REQUEST.CODE).json({
-        status: API_STATUS.FAILED,
-        message: API_RESPONSE.BAD_REQUEST.MESSAGE,
-      });
-      return;
-    }
-
     // リクエストパラメータのチェック
     if (
       !ethers.utils.isAddress(req.body.walletAddress) ||
@@ -82,8 +63,8 @@ export default async function handler(req, res) {
       Item: {
         walletAddress: req.body.walletAddress.toLowerCase(),
         smartAccountAddress: req.body.smartAccountAddress.toLowerCase(),
-        contractAndId: `${ERC2771NFTAddress}#${req.body.tokenId}`,
-        contractAddress: ERC2771NFTAddress,
+        contractAndId: `${NFTTicketAddress}#${req.body.tokenId}`,
+        contractAddress: NFTTicketAddress,
         tokenId: req.body.tokenId,
         expire: process.env.TICKET_EXPIRE,
         status: DB_CONSUME_FLAG.NOT_CONSUMED, // クーポン未使用のステータスを指定

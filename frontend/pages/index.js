@@ -29,7 +29,7 @@ import { useRouter } from 'next/router';
 import { API_RESPONSE } from 'pages/api/api-constants';
 import { useState, useEffect } from 'react';
 import { useWalletConnectClient } from '../components/contexts/ClientContext';
-import { NFTTicketAddress } from '../contracts';
+import { NFTTicketAddressArray } from '../contracts';
 
 export default function Home() {
   const {
@@ -169,10 +169,10 @@ export default function Home() {
       );
       sessionStorage.setItem('accounts', JSON.stringify(accounts));
 
-      for (let i = 0; i < NFTTicketAddress.length; i++) {
+      for (let i = 0; i < NFTTicketAddressArray.length; i++) {
         setNFTFetchCountCustom();
         const ParticipationTicketContract = new ethers.Contract(
-          NFTTicketAddress[i],
+          NFTTicketAddressArray[i],
           ParticipationTicket.abi,
           provider,
         );

@@ -13,7 +13,7 @@ import {
   LOCAL_CONFIG,
   PROD_CONFIG,
 } from 'pages/api/api-constants';
-import { ERC2771NFTAddress } from '../../../contracts';
+import { NFTTicketAddress } from '../../../contracts';
 
 let dynamoDBClient;
 if (process.env.IS_LOCALHOST === true) {
@@ -142,7 +142,7 @@ export default async function handler(req, res) {
           : process.env.PROD_TICKET_TABLE_NAME,
       Key: {
         walletAddress: req.body.walletAddress.toLowerCase(),
-        contractAndId: `${ERC2771NFTAddress}#${req.body.tokenId}`,
+        contractAndId: `${NFTTicketAddress}#${req.body.tokenId}`,
       },
       UpdateExpression: 'set #a = :x, #b = :y, #c = :z',
       ExpressionAttributeNames: {
