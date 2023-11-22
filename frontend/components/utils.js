@@ -77,4 +77,4 @@ export const DATE_OPTION_DAY_TIME = {
 export const BLOCKCHAIN_EXPLORER_URL =
   process.env.IS_ZKEVM === true
     ? 'https://zkatana.blockscout.com/tx/' //zkevm
-    : 'https://blockscout.com/astar/tx/'; //astar
+    : 'https://astar.subscan.io/tx/'; //astar
