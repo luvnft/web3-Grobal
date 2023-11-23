@@ -32,3 +32,6 @@ npm run dev
 The app uses DynamoDB as the database.<br>
 If you want to check the operation on your local PC, you can use DynamoDB Local.<br>
 https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBLocal.html
+
+
+## Description of our team 
