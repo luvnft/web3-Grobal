@@ -170,9 +170,6 @@ export default function Home() {
   // 参加券NFTの所有数を、ブロックチェーンから取得する
   const checkNftTicket = async (addr) => {
     try {
-      const provider = new ethers.providers.StaticJsonRpcProvider(
-        process.env.ASTAR_RPC_PROVIDER,
-      );
       sessionStorage.setItem('accounts', JSON.stringify(accounts));
 
       for (let i = 0; i < NFTTicketAddressArray.length; i++) {
@@ -180,7 +177,7 @@ export default function Home() {
         const ParticipationTicketContract = new ethers.Contract(
           NFTTicketAddressArray[i],
           ParticipationTicket.abi,
-          provider,
+          FIXED_RPC_PROVIDER,
         );
 
         const balance = await ParticipationTicketContract.balanceOf(addr);
@@ -422,7 +419,11 @@ export default function Home() {
     if (process.env.IS_ZKEVM === false) {
       biconomyMintTicketAPI();
     } else {
-      airdropMintTicketAPI();
+      if (process.env.IS_LOCALHOST === true) {
+        localhostMintTicketAPI();
+      } else {
+        airdropMintTicketAPI();
+      }
     }
   };
   const handleClose = () => {
@@ -655,6 +656,74 @@ export default function Home() {
       } else {
         setTxStatus(TX_STATUS.ERROR);
         setTxErrorMessage('もう一度お試しください');
+      }
+    } catch (e) {
+      console.log(e);
+      setTxStatus(TX_STATUS.ERROR);
+      setTxErrorMessage('もう一度お試しください');
+    }
+  };
+
+  // Localhost起動時に、 NFTをエアドロップするAPI
+  const localhostMintTicketAPI = async () => {
+    if (process.env.IS_LOCALHOST === false) return;
+    try {
+      const provider = new providers.JsonRpcProvider(
+        process.env.TESTNET_RPC_PROVIDER,
+      );
+      const signer = new Wallet(
+        process.env.OPERATION_PRIVATE_KEY,
+        provider,
+      );
+
+      const nftInstance = new ethers.Contract(
+        process.env.TESTNET_TICKET_NFT_CONTRACT_ADDRESS,
+        ParticipationTicket.abi,
+        signer,
+      );
+
+      const balance = await nftInstance.balanceOf(accounts[0]);
+      if (balance.toNumber() >= 1) {
+        setOpen(false);
+        alert('すでに参加券を取得済みです。');
+        return;
+      }
+
+      const estimatedGasLimit = await nftInstance.estimateGas.mintTicket(
+        accounts[0],
+      );
+      const populateMetaTx = await nftInstance.populateTransaction.mintTicket(
+        accounts[0],
+      );
+      populateMetaTx.chainId = process.env.TESTNET_CHAIN_ID; //zkevm
+      populateMetaTx.gasLimit = estimatedGasLimit;
+      populateMetaTx.gasPrice = await provider.getGasPrice();
+      populateMetaTx.nonce = await provider.getTransactionCount(
+        process.env.OPERATION_ADDRESS,
+      );
+
+      const txSigned = await signer.signTransaction(populateMetaTx);
+      const submittedTx = await provider.sendTransaction(txSigned);
+      if (submittedTx.hash) {
+        setTxHash(submittedTx.hash);
+        setTxStatus(TX_STATUS.PROGRESS);
+      } else {
+        setTxStatus(TX_STATUS.ERROR);
+        setTxErrorMessage('もう一度お試しください');
+        return;
+      }
+
+      const receipt = await provider.waitForTransaction(submittedTx.hash);
+      if (receipt.confirmations > 0) {
+        const topics = receipt.logs[0].topics;
+        if (topics[0] == ONCHAIN_EVENT.ERC721_TRANSFER_SIGNATURE) {
+          const tokenId = parseInt(topics[3], 16);
+          console.log('TokenID: ', tokenId);
+          await setTicketAPI(tokenId);
+          setTxStatus(TX_STATUS.SUCCESS);
+        }
+      } else {
+        setTxStatus(TX_STATUS.ERROR);
       }
     } catch (e) {
       console.log(e);
