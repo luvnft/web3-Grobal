@@ -17,7 +17,6 @@ Please set the environment variables in /frontend/next.config.js.
 - OPERATION_PRIVATE_KEY: This is the private key used when airdropping NFTs.
 
 
-![MicrosoftTeams-image (1)](https://github.com/tis305121/web3-Grobal-Hackathon/assets/126054542/798bd8d4-bbb7-482c-aa61-f584ddb4fc47)
 
 ## Installing the library
 ```
