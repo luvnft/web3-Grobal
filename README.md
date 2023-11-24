@@ -52,10 +52,17 @@ https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBL
   Background: IT and Cloud Infrastructure TechLead / Technacal Marketing / Technical Instructor 
 
 - ttmasa
-Role: Developer
-Contributions to this product: Frontend, smart contract
-Background: I am implementing a demo Dapp using EVM-based blockchain.
+
+  Role: Developer
+  
+  Contributions to this product: Frontend, smart contract
+  
+  Background: I am implementing a demo Dapp using EVM-based blockchain.
+  
 - yobata_8708
-Role:
-Contributions to this product:
-Background:
+
+  Role:
+  
+  Contributions to this product:
+  
+  Background:
