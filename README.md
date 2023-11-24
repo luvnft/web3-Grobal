@@ -19,6 +19,11 @@ Please set the environment variables in /frontend/next.config.js.
 ## Accounts
   ![Each_Accounts](https://github.com/tis305121/web3-Grobal-Hackathon/assets/126054542/37d3a4ce-cd66-4ccf-9191-805cf1a865d7)
 
+
+## Flow
+![flow](https://github.com/tis305121/web3-Grobal-Hackathon/assets/95739307/036dd5bf-e3c7-4090-a03e-394bfb61e86d)
+
+
 ## Installing the library
 ```
 cd frontend
