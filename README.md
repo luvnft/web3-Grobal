@@ -37,32 +37,32 @@ https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBL
 ## Description of our team 
 - sakamoto
   
-  _Role_:　Project Leader, Dapps Designer
+  _Role:_　Project Leader, Dapps Designer
   
-  _Contributed part in this product_:　Responsible for UX/UI and system design.
+  _Contributed part in this product:_　Responsible for UX/UI and system design.
   
-  _Background_:　Long experience as a project leader. Lately, contribute to dapps design and user interface design.
+  _Background:_　Long experience as a project leader. Lately, contribute to dapps design and user interface design.
 
 - tksarah
 
-  Role: Special Advisor
+  _Role:_　Special Advisor
 
-  Contributed part in this product: Support grand design and presentation 
+  _Contributed part in this product:_　Support grand design and presentation 
 
-  Background: IT and Cloud Infrastructure TechLead / Technacal Marketing / Technical Instructor 
+  _Background:_　IT and Cloud Infrastructure TechLead / Technacal Marketing / Technical Instructor 
 
 - ttmasa
 
-  Role: Developer
+  _Role:_　Developer
   
-  Contributions to this product: Frontend, smart contract
+  _Contributed part in this product:_　Frontend, smart contract
   
-  Background: I am implementing a demo Dapp using EVM-based blockchain.
+  _Background:_　I am implementing a demo Dapp using EVM-based blockchain.
   
 - yobata_8708
 
-  Role:
+  _Role:_　
   
-  Contributions to this product:
+  _Contributed part in this product:_　
   
-  Background:
+  _Background:_　
