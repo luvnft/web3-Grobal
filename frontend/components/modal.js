@@ -370,44 +370,15 @@ export function MailLoginModal({
                       ['mailAddress']: 'メールアドレスの形式が不正です',
                     }));
                   }
-                  // ブラウザウォレットアドレスは未入力を許容する
-                  if (
-                    inputData.browserWalletAddress != '' &&
-                    !ethers.utils.isAddress(inputData.browserWalletAddress)
-                  ) {
-                    passedValidation = false;
-                    setValidationMessage((prevData) => ({
-                      ...prevData,
-                      ['browserWalletAddress']:
-                        'ブラウザウォレットアドレスの形式が不正です',
-                    }));
-                  }
                   if (passedValidation === false) return;
 
                   setLoginClick(true);
 
-                  const checkResult = {
-                    ok: true,
-                    isFirstLogin: false,
-                    browserWalletArray: [],
-                  };
-                  if (checkResult.ok === false) {
-                    setLoginClick(false);
-                    return;
-                  }
-                  sessionStorage.setItem(
-                    'bwAddress',
-                    JSON.stringify(checkResult.browserWalletArray[0]),
-                  );
                   sessionStorage.setItem(
                     'mailAddress',
                     JSON.stringify(inputData.mailAddress),
                   );
-                  sessionStorage.setItem(
-                    'checkResult',
-                    JSON.stringify(checkResult),
-                  );
-                  await connectWeb3Auth(inputData.mailAddress, checkResult);
+                  await connectWeb3Auth(inputData.mailAddress);
                 }}
               >
                 <p className='text-white font-[700] text-[14px]'>ログイン</p>

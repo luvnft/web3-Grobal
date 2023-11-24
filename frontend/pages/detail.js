@@ -15,7 +15,6 @@ import { useWalletConnectClient } from '../components/contexts/ClientContext';
 export default function Detail() {
   const { accounts, setAccounts } = useWalletConnectClient();
 
-  const [index, setIndex] = useState(0);
   const [communityInfo, setCommunityInfo] = useState([]);
   const [participationInfo, setpPrticipationInfo] = useState([]);
   const [ticketInfo, setTicketInfo] = useState([]);
@@ -25,12 +24,33 @@ export default function Detail() {
 
   const router = useRouter();
 
-  const handleClose = () => {
-    setOpenConsumeModal(false);
-    setOpenParticipationModal(false);
-  };
+  
+  //　サイトアクセス時のデータ取得
+  useEffect(() => {
+    const lsSomeCommunityInfo = JSON.parse(
+      sessionStorage.getItem('lsSomeCommunityInfo'),
+    );
+    const accounts = JSON.parse(sessionStorage.getItem('accounts'));
+    if (accounts) {
+      setAccounts(accounts);
+    } else {
+      setAccounts([]);
+      sessionStorage.clear();
+      router.push('/');
+    }
 
-  const getParticipation = async (communityId) => {
+    // MetaMaskでアカウントを変更した場合は処理を行わないようにするために分岐
+    if (lsSomeCommunityInfo) {
+      let queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const index = urlParams.get('index');
+      getParticipationAPI(lsSomeCommunityInfo[index]?.communityId);
+      setCommunityInfo(lsSomeCommunityInfo[index]);
+    }
+  }, []);
+
+  // コミュニティの参加者情報を取得するAPI
+  const getParticipationAPI = async (communityId) => {
     try {
       // APIの実行
       const res = await fetch(`/api/community/getParticipation`, {
@@ -46,7 +66,7 @@ export default function Detail() {
 
       // API ステータスコードのチェック
       if (res.status != API_RESPONSE.OK.CODE) {
-        alert('DBエラーが発生しました。1');
+        alert('DBエラーが発生しました。');
         return;
       }
 
@@ -70,31 +90,7 @@ export default function Detail() {
     }
   };
 
-  //　サイトアクセス時のデータ取得
-  useEffect(() => {
-    const lsSomeCommunityInfo = JSON.parse(
-      sessionStorage.getItem('lsSomeCommunityInfo'),
-    );
-    const accounts = JSON.parse(sessionStorage.getItem('accounts'));
-    if (accounts) {
-      setAccounts(accounts);
-    } else {
-      setAccounts([]);
-      sessionStorage.clear();
-      router.push('/');
-    }
-
-    // MetaMaskでアカウントを変更した場合は処理を行わないようにするために分岐
-    if (lsSomeCommunityInfo) {
-      let queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const index = urlParams.get('index');
-      getParticipation(lsSomeCommunityInfo[index]?.communityId);
-      setIndex(index);
-      setCommunityInfo(lsSomeCommunityInfo[index]);
-    }
-  }, []);
-
+  // 所有している参加券が使用済みかチェックする
   const checkTicket = () => {
     if (ticketInfo[0]?.status === DB_CONSUME_FLAG.NOT_CONSUMED) {
       setOpenParticipationModal(true);
@@ -104,7 +100,11 @@ export default function Detail() {
     }
   };
 
-  // ページ表示
+  const handleClose = () => {
+    setOpenConsumeModal(false);
+    setOpenParticipationModal(false);
+  };
+
   return (
     <>
       {!communityInfo ? (
@@ -139,7 +139,7 @@ export default function Detail() {
             <div className='w-[calc(100%)]'>
               <img
                 className='object-cover w-[calc(100%)] border-[2px] border-black/40'
-                src={'/building.png'}
+                src={'/community.png'}
                 alt='irodori'
               ></img>
             </div>

@@ -65,18 +65,20 @@ export default function Home() {
 
   const router = useRouter();
 
+  // 画面リロード時の処理
   useEffect(() => {
     if (web3ProviderReload == '') return;
-    // NFTの所有情報の再読み込み
     const _nftFetchCount = JSON.parse(sessionStorage.getItem('nftFetchCount'));
     const _walletType = JSON.parse(sessionStorage.getItem('WALLET_TYPE'));
 
+    // ブロックチェーンからのNFT情報の取得が完了しているかのチェック
     if (
       (_nftFetchCount != TOTAL_CONTRACT_COUNT &&
         _walletType == WALLET_TYPE.METAMASK) ||
       (_nftFetchCount != TOTAL_CONTRACT_COUNT &&
         _walletType == WALLET_TYPE.WEB3AUTH)
     ) {
+      // NFT情報の取得が完了していない場合は、再取得を行う
       setIsLoading(true);
       setNFTFetchCount(0);
       Promise.all(checkNftTicket(accounts[0]))
@@ -97,6 +99,7 @@ export default function Home() {
     }
   }, [web3ProviderReload]);
 
+  // web3authからリダイレクトしてきた際に実行される処理
   useEffect(() => {
     const redirectLogin = async () => {
       if (
@@ -107,28 +110,31 @@ export default function Home() {
           isRedirect: false,
           isAuthorized: false,
         });
-        const checkResult = JSON.parse(sessionStorage.getItem('checkResult'));
+
+        // web3authからリダイレクトしてきた場合は、セッションストレージからメアドを取得する
         const mailAddress = JSON.parse(sessionStorage.getItem('mailAddress'));
-        if (checkResult === null || mailAddress === null) {
+        if (mailAddress === null) {
           loginModalHandleClose();
           setIsLoading(false);
           alert('Web3authログインでエラーが発生しました。');
           setConnecting(WALLET_TYPE.NO_LOGIN);
           await web3auth.logout();
         } else {
-          await connectWeb3Auth(mailAddress, checkResult);
+          await connectWeb3Auth(mailAddress);
         }
       }
     };
     redirectLogin();
   }, [web3authRedirect]);
 
+  // 参加券NFTの情報を、DBから取得する
   useEffect(() => {
     if (accounts.length > 0) {
       getTicketAPI();
     }
   }, [txStatus, accounts]);
 
+  // Biconomy Smart Accountの作成（初期化）を行う
   useEffect(() => {
     const createAccount = async () => {
       if (signer === '' || process.env.IS_ZKEVM === true) return;
@@ -155,13 +161,13 @@ export default function Home() {
     createAccount();
   }, [signer]);
 
-  // 接続ネットワークチェック（メニュー遷移時）
+  // コミュニティ画面に遷移する
   const goCommunityPage = async () => {
     sessionStorage.setItem('accounts', JSON.stringify(accounts));
     router.push('/menu');
   };
 
-  // 所有NFT名刺情報取得
+  // 参加券NFTの所有数を、ブロックチェーンから取得する
   const checkNftTicket = async (addr) => {
     try {
       const provider = new ethers.providers.StaticJsonRpcProvider(
@@ -185,60 +191,6 @@ export default function Home() {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const setNFTFetchCountCustom = async () => {
-    if (nftFetchCount + 1 > TOTAL_CONTRACT_COUNT) {
-      setNFTFetchCount(TOTAL_CONTRACT_COUNT);
-    } else {
-      setNFTFetchCount((prevCount) => prevCount + 1);
-    }
-  };
-
-  const loginModalHandleOpen = () => {
-    setLoginModalOpen(true); // モーダルを開く
-  };
-  const loginModalHandleClose = () => {
-    setLoginClick(false);
-    setLoginModalOpen(false); // モーダルを閉じる
-  };
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard
-      .writeText(text)
-      .then((res) => {
-        setIsCopied(true);
-        setTimeout(function () {
-          setIsCopied(false); // 一定時間経過後に、コピーアイコンを元に戻す
-        }, 2500);
-      })
-      .catch((e) => {
-        setIsCopied(false);
-        alert('Walletアドレスのコピーに失敗しました。');
-      });
-  };
-
-  const renderProgressPercentage = () => {
-    const progressPercentage = Math.trunc(
-      (nftFetchCount / TOTAL_CONTRACT_COUNT) * 100,
-    );
-    return (
-      <>
-        <p
-          className={
-            'mt-[32px] text-[18px] font-[700] text-[#4C4948] leading-[calc(100%)]'
-          }
-        >
-          {progressPercentage + '% Loading...'}
-        </p>
-        <div className='mt-[20px] w-[280px] bg-[#22A9BC]/30 rounded-full h-[3px]'>
-          <div
-            className='bg-[#22A9BC] h-[3px] rounded-full'
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
-        </div>
-      </>
-    );
   };
 
   // メタマスク接続
@@ -370,7 +322,7 @@ export default function Home() {
   };
 
   // Web3Authによる接続
-  const connectWeb3Auth = async (mailAddr, checkResult) => {
+  const connectWeb3Auth = async (mailAddr) => {
     try {
       setWeb3auth(web3auth);
       let currentWeb3auth = web3auth;
@@ -470,17 +422,73 @@ export default function Home() {
     if (process.env.IS_ZKEVM === false) {
       biconomyMintTicketAPI();
     } else {
-      if (process.env.IS_LOCALHOST === true) {
-        localhostMintTicketAPI();
-      } else {
-        backendMintTicketAPI();
-      }
+      airdropMintTicketAPI();
     }
   };
   const handleClose = () => {
     setOpen(false); // モーダルを閉じる
   };
 
+  // ブロックチェーンからのNFT情報の取得数をカウントする
+  const setNFTFetchCountCustom = async () => {
+    if (nftFetchCount + 1 > TOTAL_CONTRACT_COUNT) {
+      setNFTFetchCount(TOTAL_CONTRACT_COUNT);
+    } else {
+      setNFTFetchCount((prevCount) => prevCount + 1);
+    }
+  };
+
+  const loginModalHandleOpen = () => {
+    setLoginModalOpen(true); // モーダルを開く
+  };
+  const loginModalHandleClose = () => {
+    setLoginClick(false);
+    setLoginModalOpen(false); // モーダルを閉じる
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then((res) => {
+        setIsCopied(true);
+        setTimeout(function () {
+          setIsCopied(false); // 一定時間経過後に、コピーアイコンを元に戻す
+        }, 2500);
+      })
+      .catch((e) => {
+        setIsCopied(false);
+        alert('Walletアドレスのコピーに失敗しました。');
+      });
+  };
+
+  const renderProgressPercentage = () => {
+    const progressPercentage = Math.trunc(
+      (nftFetchCount / TOTAL_CONTRACT_COUNT) * 100,
+    );
+    return (
+      <>
+        <p
+          className={
+            'mt-[32px] text-[18px] font-[700] text-[#4C4948] leading-[calc(100%)]'
+          }
+        >
+          {progressPercentage + '% Loading...'}
+        </p>
+        <div className='mt-[20px] w-[280px] bg-[#22A9BC]/30 rounded-full h-[3px]'>
+          <div
+            className='bg-[#22A9BC] h-[3px] rounded-full'
+            style={{ width: `${progressPercentage}%` }}
+          ></div>
+        </div>
+      </>
+    );
+  };
+
+  /**
+   * API郡
+   */
+
+  // 参加券情報を取得するAPI
   const getTicketAPI = async () => {
     try {
       // APIの実行
@@ -496,7 +504,7 @@ export default function Home() {
 
       // API ステータスコードのチェック
       if (res.status != API_RESPONSE.OK.CODE) {
-        alert('DBエラーが発生しました。1');
+        alert('DBエラーが発生しました。');
         return;
       }
       const resJson = await res.json();
@@ -508,74 +516,8 @@ export default function Home() {
     }
   };
 
-  const localhostMintTicketAPI = async () => {
-    if (process.env.IS_LOCALHOST === false) return;
-    try {
-      const provider = new providers.JsonRpcProvider(
-        process.env.TESTNET_RPC_PROVIDER,
-      );
-      const signer = new Wallet(
-        process.env.OPERATION_PRIVATE_KEY,
-        provider,
-      );
-
-      const nftInstance = new ethers.Contract(
-        process.env.TESTNET_TICKET_NFT_CONTRACT_ADDRESS,
-        ParticipationTicket.abi,
-        signer,
-      );
-
-      const balance = await nftInstance.balanceOf(accounts[0]);
-      if (balance.toNumber() >= 1) {
-        setOpen(false);
-        alert('すでに参加券を取得済みです。');
-        return;
-      }
-
-      const estimatedGasLimit = await nftInstance.estimateGas.mintTicket(
-        accounts[0],
-      );
-      const populateMetaTx = await nftInstance.populateTransaction.mintTicket(
-        accounts[0],
-      );
-      populateMetaTx.chainId = process.env.TESTNET_CHAIN_ID; //zkevm
-      populateMetaTx.gasLimit = estimatedGasLimit;
-      populateMetaTx.gasPrice = await provider.getGasPrice();
-      populateMetaTx.nonce = await provider.getTransactionCount(
-        process.env.OPERATION_ADDRESS,
-      );
-
-      const txSigned = await signer.signTransaction(populateMetaTx);
-      const submittedTx = await provider.sendTransaction(txSigned);
-      if (submittedTx.hash) {
-        setTxHash(submittedTx.hash);
-        setTxStatus(TX_STATUS.PROGRESS);
-      } else {
-        setTxStatus(TX_STATUS.ERROR);
-        setTxErrorMessage('もう一度お試しください');
-        return;
-      }
-
-      const receipt = await provider.waitForTransaction(submittedTx.hash);
-      if (receipt.confirmations > 0) {
-        const topics = receipt.logs[0].topics;
-        if (topics[0] == ONCHAIN_EVENT.ERC721_TRANSFER_SIGNATURE) {
-          const tokenId = parseInt(topics[3], 16);
-          console.log('TokenID: ', tokenId);
-          await setTicketAPI(tokenId);
-          setTxStatus(TX_STATUS.SUCCESS);
-        }
-      } else {
-        setTxStatus(TX_STATUS.ERROR);
-      }
-    } catch (e) {
-      console.log(e);
-      setTxStatus(TX_STATUS.ERROR);
-      setTxErrorMessage('もう一度お試しください');
-    }
-  };
-
-  const backendMintTicketAPI = async () => {
+  // NFTをエアドロップするAPI
+  const airdropMintTicketAPI = async () => {
     if (process.env.IS_LOCALHOST === true) return;
     try {
       const res = await fetch(`/api/ticket/mintTicket`, {
@@ -625,6 +567,7 @@ export default function Home() {
     }
   };
 
+  // Biconomyを利用し、ガスレスでMintを行うAPI
   const biconomyMintTicketAPI = async () => {
     if (process.env.IS_ZKEVM === true) return;
     try {
@@ -691,7 +634,6 @@ export default function Home() {
       const transactionDetail = await userOpResponse.wait(1);
 
       const txHash = transactionDetail.receipt.transactionHash;
-      console.log(transactionDetail);
       if (txHash.length == 66) {
         setTxHash(txHash);
         setTxStatus(TX_STATUS.PROGRESS);
@@ -721,6 +663,7 @@ export default function Home() {
     }
   };
 
+  // 参加券情報をDBに格納するAPI
   const setTicketAPI = async (tokenId) => {
     try {
       const res = await fetch(`/api/ticket/setTicket`, {

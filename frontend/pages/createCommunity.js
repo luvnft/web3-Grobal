@@ -5,6 +5,7 @@ import { API_RESPONSE } from 'pages/api/api-constants';
 import { useState, useEffect } from 'react';
 import { useWalletConnectClient } from '../components/contexts/ClientContext';
 
+// 商業施設の店舗情報（デモ用に固定値を利用）
 const SHOP_INFO = [
   { value: 0, building: 'Tokyo Torch', location: '東京', shopName: '店舗A' },
   { value: 1, building: '大名古屋ビル', location: '愛知', shopName: '店舗B' },
@@ -27,6 +28,7 @@ export default function CreateCommunity() {
 
   const router = useRouter();
 
+  // コミュニティ情報をDBに格納するAPI
   const setCommunityAPI = async () => {
     try {
       // APIの実行
@@ -67,7 +69,6 @@ export default function CreateCommunity() {
     }));
   };
 
-  // ページ表示
   return (
     <>
       <div className={'mx-[20px] my-[24px] min-h-[calc(100vh)]'}>
@@ -205,7 +206,6 @@ export default function CreateCommunity() {
               className='w-[calc(100%)] h-[22px] text-left text-[14px] text-[#4C4948] bg-gray-200'
               name='expire'
               placeholder={`Sun Dec 31 2023 21:00:00`}
-              // onChange={onChangeCommunityInputData}
               value={inputData.expire}
             />
           </div>

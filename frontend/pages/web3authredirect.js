@@ -2,6 +2,9 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useWalletConnectClient } from '../components/contexts/ClientContext';
 
+/**
+ * メールログイン時、web3authからリダイレクトしてきた際に、一瞬に表示される画面
+ */
 export default function Web3authRedirect() {
   const { setWeb3authRedirect } = useWalletConnectClient();
 

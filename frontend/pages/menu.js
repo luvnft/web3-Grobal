@@ -12,7 +12,7 @@ export default function Menu() {
 
   const router = useRouter();
 
-  //　ページアクセス時のデータ取得
+  // コミュニティ情報の取得APIの呼び出し
   useEffect(() => {
     const accounts = JSON.parse(sessionStorage.getItem('accounts'));
     if (accounts) {
@@ -22,11 +22,11 @@ export default function Menu() {
       sessionStorage.clear();
       router.push('/');
     }
-
-    getSomeCommunity();
+    getSomeCommunityAPI();
   }, []);
 
-  const getSomeCommunity = async () => {
+  //　コミュニティ情報の取得
+  const getSomeCommunityAPI = async () => {
     try {
       // APIの実行
       const res = await fetch(`/api/community/getSomeCommunity`, {
@@ -64,6 +64,7 @@ export default function Menu() {
     }
   };
 
+  // コミュニティのレンダー
   const renderCommunity = () => {
     let array = [];
     someCommunityInfo.map((item, i) => {
@@ -79,7 +80,7 @@ export default function Menu() {
               <div className='rounded-tl-[10px] w-[100px] h-[100px]'>
                 <img
                   className='rounded-tl-[4px] object-cover w-[100px] h-[100px]'
-                  src={'/building.png'}
+                  src={'/community.png'}
                   alt=''
                 ></img>
               </div>
@@ -143,7 +144,6 @@ export default function Menu() {
     return array;
   };
 
-  // ページ表示
   return (
     <>
       <div className={'mx-[20px] my-[24px] min-h-[calc(100vh)]'}>

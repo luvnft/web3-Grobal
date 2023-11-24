@@ -23,7 +23,6 @@ export function ClientContextProvider({ children }) {
   const [accounts, setAccounts] = useState([]);
   const [web3auth, setWeb3auth] = useState(null);
   const [snsProvider, setSNSProvider] = useState(null);
-  const [bwAddress, setBWAddress] = useState('');
   const [urlBWAddress, setUrlBWAddress] = useState('');
   const [nftFetchCount, setNFTFetchCount] = useState(0);
   const [mailAddressFromSessionId, setMailAddressFromSessionId] = useState('');
@@ -236,8 +235,6 @@ export function ClientContextProvider({ children }) {
       setSNSProvider,
       web3auth,
       setWeb3auth,
-      bwAddress,
-      setBWAddress,
       urlBWAddress,
       setUrlBWAddress,
       nftFetchCount,
@@ -263,8 +260,6 @@ export function ClientContextProvider({ children }) {
       setSNSProvider,
       web3auth,
       setWeb3auth,
-      bwAddress,
-      setBWAddress,
       urlBWAddress,
       setUrlBWAddress,
       nftFetchCount,
