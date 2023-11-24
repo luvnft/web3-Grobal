@@ -36,9 +36,9 @@ https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBL
 
 ## Description of our team 
 - sakamoto
-Role: Project Leader, Dapps Designer
-Contributed part in this product: Responsible for UX/UI and system design.
-Background: Long experience as a project leader. Lately, contribute to dapps design and user interface design.
+  Role: Project Leader, Dapps Designer
+  Contributed part in this product: Responsible for UX/UI and system design.
+  Background: Long experience as a project leader. Lately, contribute to dapps design and user interface design.
 - tksarah
 Role: Special Advisor
 Contributed part in this product: Support grand design and presentation 
