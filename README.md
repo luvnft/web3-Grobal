@@ -15,6 +15,7 @@ Please set the environment variables in /frontend/next.config.js.
 - BUNDLER_URL: Biconomy SDK bundler URL.
 - PAYMASTER_URL: Biconomy SDK paymaster URL.
 - OPERATION_PRIVATE_KEY: This is the private key used when airdropping NFTs.
+![Each_Accounts](https://github.com/tis305121/web3-Grobal-Hackathon/assets/126054542/37d3a4ce-cd66-4ccf-9191-805cf1a865d7)
 
 
 
