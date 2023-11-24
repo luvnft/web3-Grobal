@@ -45,11 +45,11 @@ https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBL
 
 - tksarah
 
-Role: Special Advisor
+  Role: Special Advisor
 
-Contributed part in this product: Support grand design and presentation 
+  Contributed part in this product: Support grand design and presentation 
 
-Background: IT and Cloud Infrastructure TechLead / Technacal Marketing / Technical Instructor 
+  Background: IT and Cloud Infrastructure TechLead / Technacal Marketing / Technical Instructor 
 
 - ttmasa
 Role: Developer
