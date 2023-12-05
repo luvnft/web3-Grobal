@@ -878,16 +878,11 @@ export default function Home() {
                       'w-[calc(100%)] h-[56.5px] flex justify-center items-center'
                     }
                   >
-                    <div
-                      className='w-[calc(100%)] h-[70px] rounded-[20px] bg-[#ffbe76] flex justify-center space-x-[10px] items-center'
+                    <span
+                      class="inline-flex items-center rounded-md bg-red-50 px-2 py-3 text-l font-[600] text-red-800 ring-1 ring-inset ring-red-600/20"
                       onClick={goCommunityPage}
-                    >
-                      <p className='text-[#4C4948] font-[600] px-[10px] text-[16px] text-center'>
-                        コミュニティ
-                        <br />
-                        一覧
-                      </p>
-                    </div>
+                    >コミュニティ一覧
+                    </span>
                   </div>
                 </div>
               </div>
@@ -903,8 +898,8 @@ export default function Home() {
               <p className='text-[#FFF] font-normal text-[15px] break-words'>
                 {smartAccountAddress
                   ? smartAccountAddress.slice(0, 4) +
-                    '...' +
-                    smartAccountAddress.slice(-5)
+                  '...' +
+                  smartAccountAddress.slice(-5)
                   : accounts[0].slice(0, 4) + '...' + accounts[0].slice(-5)}
               </p>
               {isCopied ? (
